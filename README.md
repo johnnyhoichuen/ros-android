@@ -1,6 +1,12 @@
 # ROS-Mobile
 
-ROS-Mobile is an [Android](https://www.android.com/) application designed for dynamic control and visualization of mobile robotic system operated by the Robot Operating System ([ROS](http://wiki.ros.org/)). The application uses ROS nodes initializing publisher and subscriber with standard ROS messages. The overall code architecture pattern is Model View ViewModel ([MVVM]([https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel](https://en.wikipedia.org/wiki/Model–view–viewmodel))), which stabilizes the application and makes it highly customizable. For a detailed overview of the functionality, we refer to our [wiki](https://github.com/ROS-Mobile/ROS-Mobile-Android/wiki).
+A project based on [ROS-Mobile](https://github.com/ROS-Mobile/ROS-Mobile-Android).
+
+Change list:
+- Integrated with Mapbox & Mapxus map
+- Subscribe to ROS topics without using widgets defined in the original project (widgets can only be used in VizFragment)
+
+ROS-Mobile is an Android application designed for dynamic control and visualization of mobile robotic system operated by the Robot Operating System ([ROS](http://wiki.ros.org/)). The application uses ROS nodes initializing publisher and subscriber with standard ROS messages. The overall code architecture pattern is Model View ViewModel ([MVVM]([https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel](https://en.wikipedia.org/wiki/Model–view–viewmodel))), which stabilizes the application and makes it highly customizable. For a detailed overview of the functionality, we refer to our [wiki](https://github.com/ROS-Mobile/ROS-Mobile-Android/wiki).
 
 - Current stable Version: 2.0.0
 
@@ -22,25 +28,17 @@ If you use ROS-Mobile for your research, please cite
 - Mobile Android Device with Android Version 5.0 (Lollipop) or higher
 - Android Studio Version 3.6.1 or higher (if built from source)
 
-## Installing Instructions
-
-There are three different ways for installing ROS-Mobile onto your mobile device: Built from source, install current apk, download from Google Playstore. We highly recommend to use the download function from the Google Playstore.
-
 ##### Built from Source:
 
 - Install Android Studio Version 3.6.1 or higher
 - Download the complete repository (Master Branch) and open it via Android Studio
 - Built the Code (Make Project Button), connect your mobile device to your PC and install the Software (Run 'app'). Make sure you activated the developer options and adb debugging on your mobile device and installed all required drivers for usb and adb.
 
-##### Install current APK:
 
-- Download the current ROS-Mobile version as [apk file](https://github.com/ROS-Mobile/ROS-Mobile-Android/blob/master/app/release/app-release.apk) and store it in an easy-to-find location onto your mobile device
-- Allow third-party apps on your device. Therefore go to **Menu > Settings > Security** and check **Unknown Sources**
-- Go now to the apk file, tap it, then hit install
 
-##### Download from Google Playstore:
 
-- Simply go to the [Google Playstore Website](https://play.google.com/store/apps/details?id=com.johnnyhoichuen.rosandroid) of the ROS-Mobile app and download it. It will be installed automatically
+
+
 
 ## Introduction Video
 [![Introduction Video](http://img.youtube.com/vi/T0HrEcO-0x0/0.jpg)](http://www.youtube.com/watch?v=T0HrEcO-0x0)
