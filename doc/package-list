@@ -1,0 +1,17 @@
+com.johnnyhoichuen.rosandroid.domain
+com.johnnyhoichuen.rosandroid.model.db
+com.johnnyhoichuen.rosandroid.model.entities
+com.johnnyhoichuen.rosandroid.model.repositories
+com.johnnyhoichuen.rosandroid.model.repositories.rosRepo
+com.johnnyhoichuen.rosandroid.model.repositories.rosRepo.connection
+com.johnnyhoichuen.rosandroid.model.repositories.rosRepo.message
+com.johnnyhoichuen.rosandroid.model.repositories.rosRepo.node
+com.johnnyhoichuen.rosandroid.ui.activity
+com.johnnyhoichuen.rosandroid.ui.custum_views
+com.johnnyhoichuen.rosandroid.ui.fragments
+com.johnnyhoichuen.rosandroid.ui.helper
+com.johnnyhoichuen.rosandroid.utility
+com.johnnyhoichuen.rosandroid.viewmodel
+com.johnnyhoichuen.rosandroid.widgets.base
+com.johnnyhoichuen.rosandroid.widgets.joystick
+com.johnnyhoichuen.rosandroid.widgets.test

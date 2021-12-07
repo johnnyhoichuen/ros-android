@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="Gradle: com.mapxus.map:mapxusmap:4.2.4@aar">
+    <ANNOTATIONS>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4913406232ae7423d498829d20372350/jetified-mapxusmap-4.2.4/annotations.zip!/" />
+    </ANNOTATIONS>
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4913406232ae7423d498829d20372350/jetified-mapxusmap-4.2.4/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4913406232ae7423d498829d20372350/jetified-mapxusmap-4.2.4/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4913406232ae7423d498829d20372350/jetified-mapxusmap-4.2.4/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mapxus.map/mapxusmap/4.2.4/895ff92d33ebf716d3933cfe2f7e31d30881aa90/mapxusmap-4.2.4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mapxus.map/mapxusmap/4.2.4/895ff92d33ebf716d3933cfe2f7e31d30881aa90/mapxusmap-4.2.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
