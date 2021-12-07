@@ -2,6 +2,18 @@
 
 A project based on [ROS-Mobile](https://github.com/ROS-Mobile/ROS-Mobile-Android).
 
+
+
+### Temi branch
+
+Specifically designed to work with [Temi](https://www.robotemi.com.hk/).
+
+Positioning algorithm will combine
+1. VLP result from a raspberry pi installed on Temi and
+2. positioning result based on LiDAR & encoder from Temi
+
+
+
 Change list:
 - Integrated with Mapbox & Mapxus map
 - Subscribe to ROS topics without using widgets defined in the original project (widgets can only be used in VizFragment)
