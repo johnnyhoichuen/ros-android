@@ -57,6 +57,61 @@ public class MapxusViewModel extends AndroidViewModel implements NodeListener {
         getRosData().observeForever(data -> {
             // print sth
         });
+
+        // get temi's location
+        getTemiPosition().observeForever(position -> {
+
+            if (position == null) return;
+
+            // filter out repeating signals
+            if (temiManager.getLastPosition() != null)
+                if (temiManager.getLastPosition().getX() == position.getX() &&
+                        temiManager.getLastPosition().getY() == position.getY() &&
+                        temiManager.getLastPosition().getYaw() == position.getYaw())
+                    return;
+
+            // log
+            Timber.tag("temi").d("position xy: (%f, %f), yaw: %f",
+                    position.getX(), position.getY(), position.getYaw());
+
+            // diff between true north to y-axis (clockwise)
+            // ICDC: 90 degrees shift
+            LatLng latLng = temiManager.translateToLatlng(position.getX(), position.getY(), 90);
+
+            // get degree in [0, 360]
+            double degree = temiManager.getYawInDegree(position.getYaw());
+
+            Timber.tag("temi").d("position latlng: (%f, %f), yaw in degree: %f",
+                    latLng.latitude, latLng.longitude, degree);
+
+
+            // set location to update mapxus map and wait for interval update
+
+            // update location & orientation
+            IndoorLocation location = new IndoorLocation("TEMI",
+                    latLng.latitude, latLng.longitude, "3F", "31742af5bc8446acad14e0c053ae468a", System.currentTimeMillis());
+            location.setBearing((float) degree);
+
+            // pass it to UI/mapxus manager
+            temiListener.OnTemiLocationChanged(location);
+
+            // public data to ROS server
+            // BaseData passed should contain temi's message name
+//                BaseData data = new BaseData()
+//                rosDomain.publishData();
+
+            // update last position in temi manager
+            temiManager.setLastPosition(position);
+        });
+    }
+
+    public void onStart() {
+        temiManager.init();
+        mapxusManager.onStart();
+    }
+
+    public void onPause() {
+        mapxusManager.onPause();
     }
 
     public LiveData<RosData> getRosData() {
