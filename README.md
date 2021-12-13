@@ -12,7 +12,10 @@ Positioning algorithm will combine
 1. VLP result from a raspberry pi installed on Temi and
 2. positioning result based on LiDAR & encoder from Temi
 
-
+### Connect to Temi
+1. Go to Developer Tools -> Enable ADB Port Opening
+2. Get IP Address on the same page
+3. In terminal, type `adb connect [IP address]` (IP address with HKUST eduroam: 10.89.117.160)
 
 Change list:
 - Integrated with Mapbox & Mapxus map

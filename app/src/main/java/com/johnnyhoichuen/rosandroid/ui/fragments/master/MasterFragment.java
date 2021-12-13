@@ -118,20 +118,23 @@ public class MasterFragment extends Fragment implements TextView.OnEditorActionL
 
         // User input ------------------------------------------------------------------------------
 
+//        // TODO: auto connect to master
+//        updateMasterDetails();
+//        mViewModel.setMasterDeviceIp(ipAddressField.getText().toString());
+//        mViewModel.connectToMaster();
+
+        // TODO: replace this
         binding.connectButton.setOnClickListener(v -> {
             updateMasterDetails();
             mViewModel.setMasterDeviceIp(ipAddressField.getText().toString());
             mViewModel.connectToMaster();
         });
+
         binding.disconnectButton.setOnClickListener(v -> mViewModel.disconnectFromMaster());
         binding.helpButton.setOnClickListener(v -> showConnectionHelpDialog());
         binding.masterIpEditText.setOnEditorActionListener(this);
         binding.masterPortEditText.setOnEditorActionListener(this);
 
-//        // auto connect to master
-//        updateMasterDetails();
-//        mViewModel.setMasterDeviceIp(ipAddressField.getText().toString());
-//        mViewModel.connectToMaster();
 
         return binding.getRoot();
     }
@@ -141,13 +144,6 @@ public class MasterFragment extends Fragment implements TextView.OnEditorActionL
         super.onDestroyView();
         updateMasterDetails();
         binding = null;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
     }
 
     private void updateIpSpinner() {
