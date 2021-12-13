@@ -44,6 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import geometry_msgs.TransformStamped;
+import geometry_msgs.Vector3;
 import nav_msgs.Odometry;
 import tf2_msgs.TFMessage;
 
@@ -117,24 +118,35 @@ public class RosRepository implements NodeListener {
         tfNode.setTopic(tfTopic);
         currentNodes.put(tfTopic, tfNode);
 
-        // tf static
-        Topic tfStaticTopic = new Topic("/tf_static", TFMessage._TYPE);
-        SubNode tfStaticNode = new SubNode(this);
-        tfStaticNode.setTopic(tfStaticTopic);
-        currentNodes.put(tfStaticTopic, tfStaticNode);
+//        // tf static
+//        Topic tfStaticTopic = new Topic("/tf_static", TFMessage._TYPE);
+//        SubNode tfStaticNode = new SubNode(this);
+//        tfStaticNode.setTopic(tfStaticTopic);
+//        currentNodes.put(tfStaticTopic, tfStaticNode);
 
-        // slovlp ekf topic
-//        Topic ekfStaticTopic = new Topic(CustomTopicName.SLOVLP_EKF.name, PoseWithCovarianceStamped._TYPE);
+        // odom topic
         Topic ekfStaticTopic = new Topic("/odom", Odometry._TYPE);
         SubNode ekfStaticNode = new SubNode(this);
         ekfStaticNode.setTopic(ekfStaticTopic);
         currentNodes.put(ekfStaticTopic, ekfStaticNode);
 
+//        // currently buggy
 //        // liphy vlp
 //        Topic vlpStaticTopic = new Topic(CustomTopicName.LIPHY_VLP.name, "liphy_vlp/liphylight");
 //        SubNode vlpStaticNode = new SubNode(this);
 //        vlpStaticNode.setTopic(vlpStaticTopic);
 //        currentNodes.put(vlpStaticTopic, vlpStaticNode);
+
+        /*
+        Publishers
+         */
+
+//        // temi's location, using Vector3 for now
+//        Topic temiTfTopic = new Topic("/temi_tf", Vector3._TYPE);
+//        PubNode temiTfNode = new PubNode();
+//        temiTfNode.setTopic(temiTfTopic);
+//        currentNodes.put(temiTfTopic, temiTfNode);
+
 
     }
 
@@ -511,6 +523,7 @@ public class RosRepository implements NodeListener {
             nodeMainExecutorService.addListener(serviceListener);
             rosConnected.setValue(ConnectionType.CONNECTED);
 
+            // register all nodes, including static ones
             registerAllNodes();
         }
 
