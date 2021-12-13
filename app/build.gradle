@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 def secretPropertiesFile = rootProject.file("./secret.properties")
 def secretProperties = new Properties()
@@ -11,11 +12,14 @@ android {
 
     defaultConfig {
         applicationId "com.johnnyhoichuen.rosandroid"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 30
-        versionCode 7
-        versionName '2.1.0(0)'
+        versionCode 1
+        versionName '0.0.1(5)'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // strings for system info
+        resValue "string", "app_version", "${defaultConfig.versionName}"
     }
 
     buildTypes {
@@ -23,6 +27,8 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders = ["appid": secretProperties['appid'], "secret": secretProperties['secret']]
+
+            debuggable false
         }
 
         debug {
@@ -53,6 +59,7 @@ dependencies {
     compile(name: 'liphy-sdk-3.98', ext: 'aar')
     compile(name: 'liphynavigation-sdk-regular-debug', ext: 'aar')
     implementation 'com.parse:parse-android:1.15.8'
+    implementation 'com.jakewharton.timber:timber:5.0.1'
 
     // mapxus
     implementation "com.mapxus.map:mapxusmap:4.2.4"
@@ -85,6 +92,10 @@ dependencies {
     implementation 'org.ros.rosjava_bootstrap:message_generation:0.3.3'
     implementation 'org.ros.android_core:android_core_components:0.4.0'
 
+    // firebase
+    implementation platform('com.google.firebase:firebase-bom:29.0.1')
+    implementation 'com.google.firebase:firebase-analytics'
+
     // Parsing
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation project(path: ':jcraft')
@@ -97,5 +108,8 @@ dependencies {
 
     // Color picker
     implementation "com.github.skydoves:colorpickerview:2.2.3"
+
+    // temi
+    implementation "com.robotemi:sdk:0.10.78"
 
 }
