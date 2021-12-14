@@ -240,6 +240,42 @@ public class MapxusFragment extends Fragment implements OnMapReadyCallback, OnMa
         return v;
     }
 
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+//        mapxusPoseViewGroup = view.findViewById(R.id.mapxusView);
+//        mapxusPoseViewGroup.setDataListener(this);
+//        mapxusPoseViewGroup.setOnWidgetDetailsChanged(this);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+//        startLocationUpdateThread();
+        mViewModel.onStart();
+//        mViewModel.getMapxusManager().onStart();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mViewModel.onPause();
+//        mViewModel.getMapxusManager().onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mViewModel.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        System.gc();
+        super.onDestroyView();
+    }
+
     @Override
     public void onMapReady(@NonNull @NotNull MapboxMap mapboxMap) {
         this.mapboxMap = mapboxMap;
@@ -302,42 +338,6 @@ public class MapxusFragment extends Fragment implements OnMapReadyCallback, OnMa
 //
 //            }
 //        });
-    }
-
-
-    @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-//        mapxusPoseViewGroup = view.findViewById(R.id.mapxusView);
-//        mapxusPoseViewGroup.setDataListener(this);
-//        mapxusPoseViewGroup.setOnWidgetDetailsChanged(this);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-//        startLocationUpdateThread();
-        mViewModel.onStart();
-//        mViewModel.getMapxusManager().onStart();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mViewModel.onPause();
-//        mViewModel.getMapxusManager().onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mViewModel.onDestroy();
-    }
-
-    @Override
-    public void onDestroyView() {
-        System.gc();
-        super.onDestroyView();
     }
 
     @Override
