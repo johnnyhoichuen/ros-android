@@ -10,6 +10,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.johnnyhoichuen.rosandroid.model.entities.CustomTopic;
 import com.johnnyhoichuen.rosandroid.model.entities.MasterEntity;
 import com.johnnyhoichuen.rosandroid.model.entities.widgets.BaseEntity;
 import com.johnnyhoichuen.rosandroid.model.entities.widgets.GroupEntity;
@@ -43,10 +44,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import geometry_msgs.Pose;
 import geometry_msgs.TransformStamped;
-import geometry_msgs.Vector3;
+import geometry_msgs.Twist;
 import nav_msgs.Odometry;
 import tf2_msgs.TFMessage;
+import timber.log.Timber;
 
 
 /**
@@ -132,7 +135,7 @@ public class RosRepository implements NodeListener {
 
 //        // currently buggy
 //        // liphy vlp
-//        Topic vlpStaticTopic = new Topic(CustomTopicName.LIPHY_VLP.name, "liphy_vlp/liphylight");
+//        Topic vlpStaticTopic = new Topic(CustomTopic.LIPHY_VLP.name, "liphy_vlp/liphylight");
 //        SubNode vlpStaticNode = new SubNode(this);
 //        vlpStaticNode.setTopic(vlpStaticTopic);
 //        currentNodes.put(vlpStaticTopic, vlpStaticNode);
@@ -141,12 +144,11 @@ public class RosRepository implements NodeListener {
         Publishers
          */
 
-//        // temi's location, using Vector3 for now
-//        Topic temiTfTopic = new Topic("/temi_tf", Vector3._TYPE);
-//        PubNode temiTfNode = new PubNode();
-//        temiTfNode.setTopic(temiTfTopic);
-//        currentNodes.put(temiTfTopic, temiTfNode);
-
+        // temi's location, using Vector3 for now
+        Topic temiTfTopic = new Topic(CustomTopic.EXTERNAL_POSE.name, Pose._TYPE);
+        PubNode temiTfNode = new PubNode();
+        temiTfNode.setTopic(temiTfTopic);
+        currentNodes.put(temiTfTopic, temiTfNode);
 
     }
 
@@ -180,6 +182,8 @@ public class RosRepository implements NodeListener {
         if(node instanceof PubNode) {
             ((PubNode)node).setData(data);
         }
+
+        Timber.tag("ros").d("publishing data topic: %s, %s", data.getTopic().name, data.getTopic().type);
     }
 
     /**
