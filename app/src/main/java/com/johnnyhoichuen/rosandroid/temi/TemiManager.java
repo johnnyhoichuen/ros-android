@@ -56,8 +56,12 @@ public class TemiManager implements OnRobotReadyListener, OnLocationsUpdatedList
 
     @Override
     public void onGoToLocationStatusChanged(@NotNull String location, @NotNull String status, int descriptionId, @NotNull String description) {
-        Timber.tag("temi").d("onGoToLocationStatusChanged: lcoation = %s, status = %s, descriptionId = %i, description = %s",
-            location, status, descriptionId, description);
+//        Timber.tag("temi").d("onGoToLocationStatusChanged: location = %s, status = %s, descriptionId = %i, description = %s",
+//            location, status, descriptionId, description);
+//        Timber.tag("temi").d("onGoToLocationStatusChanged: " + location + " " + status + " " +
+//            descriptionId + " " + description);
+
+
     }
     @Override
     public void onLocationsUpdated(@NotNull List<String> locations) {
@@ -69,6 +73,12 @@ public class TemiManager implements OnRobotReadyListener, OnLocationsUpdatedList
     @Override
     public void onCurrentPositionChanged(@NotNull Position position) {
         Timber.tag("temi").d("onCurrentPositionChanged: position = %s", position);
+
+        if (currentPosition == null) {
+            currentPosition = new MutableLiveData<>();
+            currentPosition.setValue(position);
+        }
+
         currentPosition.setValue(position);
     }
 
@@ -86,15 +96,8 @@ public class TemiManager implements OnRobotReadyListener, OnLocationsUpdatedList
         Robot.getInstance().removeOnCurrentPositionChangedListener(this);
     }
 
-    public LiveData<Position> getPosition() {
-        // this causes model.getPosition().observe(...) to crash
-//        if (!getIsRobotReady()) return null;
-
-        if (currentPosition == null) {
-            currentPosition = new MutableLiveData<>();
-        }
-
-        return currentPosition;
+    public void goToPosition(Position position) {
+        Robot.getInstance().goToPosition(position);
     }
 
     public LatLng translateToLatlng(double x, double y, double angle) {
@@ -154,10 +157,10 @@ public class TemiManager implements OnRobotReadyListener, OnLocationsUpdatedList
         double latComponent = ycos - xsin;
         double lngComponent = xcos + ysin;
 
-        Timber.tag("temi").d("position times sin * x, sin * y: (%f, %f)", x * sinAngle, y * sinAngle);
-        Timber.tag("temi").d("position times cos * x, cos * y: (%f, %f)", x * cosAngle, y * cosAngle);
-        Timber.tag("temi").d("position [latComp, lngComp: (%f, %f)], [sinAngle, cosAngle: (%f, %f)]",
-                latComponent, lngComponent, sinAngle, cosAngle);
+//        Timber.tag("temi").d("position times sin * x, sin * y: (%f, %f)", x * sinAngle, y * sinAngle);
+//        Timber.tag("temi").d("position times cos * x, cos * y: (%f, %f)", x * cosAngle, y * cosAngle);
+//        Timber.tag("temi").d("position [latComp, lngComp: (%f, %f)], [sinAngle, cosAngle: (%f, %f)]",
+//                latComponent, lngComponent, sinAngle, cosAngle);
 
         double latitude = ((latComponent * latScalingFactor) + TemiManager.homeBaseLat);
         double longitude = ((lngComponent * lngScalingFactor) + TemiManager.homeBaseLng);
@@ -165,14 +168,65 @@ public class TemiManager implements OnRobotReadyListener, OnLocationsUpdatedList
         return new LatLng(latitude, longitude);
     }
 
-    public Position translateToTemiCoor(double latitude, double longitude) {
-        double x = (latitude - homeBaseLat) / latScalingFactor;
-        double y = (longitude - homeBaseLng) / lngScalingFactor;
+    public Position translateToTemiCoor(double latitude, double longitude, double angle) {
+        Timber.tag("temi").d("translateToTemiCoor");
+
+        double latComponent = (latitude - homeBaseLat) / latScalingFactor;
+        double lngComponent = (longitude - homeBaseLng) / lngScalingFactor;
+        
+        // rotate the component back to x,y's orientation
+        double sinAngle, cosAngle;
+
+        // solving -0 issue
+        if (angle == 90 || angle == 270) {
+            cosAngle = 0; // ensure it's 0
+            if (angle == 90) sinAngle = 1;
+            else sinAngle = -1;
+        } else if (angle == 0 || angle == 180 || angle == 360) {
+            sinAngle = 0; // ensure it's 0
+            if (angle == 0 || angle == 360) cosAngle = 1;
+            else cosAngle = -1;
+        } else {
+            double angleInRadian = Math.toRadians(angle);
+            sinAngle = Math.sin(angleInRadian);
+            cosAngle = Math.cos(angleInRadian);
+        }
+
+        double xsin = latComponent * sinAngle;
+        double ysin = lngComponent * sinAngle;
+        double xcos = latComponent * cosAngle;
+        double ycos = lngComponent * cosAngle;
+
+        // bug: negative positive * 0 = negative, like wtf
+        if (cosAngle == 0) {
+            if (latComponent < 0) xcos = -xcos;
+            else if (lngComponent < 0) ycos = -ycos;
+        }
+
+        // apply rotation matrix
+        double x = -xsin + ycos;
+        double y = xcos + ysin;
 
         Position position = new Position();
         position.setX((float) x);
         position.setY((float) y);
-        return new Position();
+
+        Timber.tag("temi").d("latlng to xy");
+        Timber.tag("temi").d("x = %f", position.getX());
+        Timber.tag("temi").d("y = %f", position.getY());
+
+        return position;
+    }
+
+    public LiveData<Position> getPosition() {
+        // this causes model.getPosition().observe(...) to crash
+//        if (!getIsRobotReady()) return null;
+
+        if (currentPosition == null) {
+            currentPosition = new MutableLiveData<>();
+        }
+
+        return currentPosition;
     }
 
     /**
