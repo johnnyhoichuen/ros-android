@@ -23,6 +23,7 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapxus.map.mapxusmap.api.map.MapViewProvider;
 import com.mapxus.map.mapxusmap.api.map.MapxusMap;
 import com.mapxus.map.mapxusmap.api.map.interfaces.OnMapxusMapReadyCallback;
+import com.mapxus.map.mapxusmap.api.map.model.LatLng;
 import com.mapxus.map.mapxusmap.api.services.RoutePlanning;
 import com.mapxus.map.mapxusmap.impl.MapboxMapViewProvider;
 import com.mapxus.map.mapxusmap.positioning.IndoorLocation;
@@ -33,41 +34,32 @@ import com.johnnyhoichuen.rosandroid.viewmodel.MapxusViewModel;
 import org.jetbrains.annotations.NotNull;
 
 public class MapxusFragment extends Fragment implements OnMapReadyCallback, OnMapxusMapReadyCallback,
-    // DataListener, WidgetChangeListener, // ROS Mobile
-    MapxusViewModel.OnTemiLocationChangedListener, MapxusViewModel.OnRobotLocationChangedListener
-{
+    MapxusViewModel.OnTemiLocationChangedListener, MapxusViewModel.OnRobotLocationChangedListener {
 
     private static final String TAG = MapxusFragment.class.getSimpleName();
 
     private MapxusViewModel mViewModel;
 
-    private RoutePlanning routePlanning = RoutePlanning.newInstance();
+    // map basics
     private MapView mapView;
     private MapViewProvider mapViewProvider;
     private MapboxMap mapboxMap;
     private MapxusMap mapxusMap;
 
-    // for locating the bluedot
+    // map navigation
     private MapxusNavigationPositioningProvider mapxusPositioningProvider;
-//    private boolean locUpdateInQueue = false;
-//    private Handler locationUpdateHandler;
-//    private com.mapxus.map.mapxusmap.positioning.IndoorLocation queuedLocation;
 
-    //    private MapxusPoseReceiver mapxusPoseViewGroup;
+    // map marker
     private SymbolManager symbolManager;
     private OnSymbolClickListener onMapboxMarkerClickListener;
     private LocationComponentOptions mapBoxDefaultLocationComponentOptions;
     private LocationComponentActivationOptions mapBoxCustomLocationComponentActivationOptions;
-    private Object mapBoxDefaultLocationComponentActivationOptions;
+    private LocationComponentActivationOptions mapBoxDefaultLocationComponentActivationOptions;
     private LocationComponentOptions mapBoxCustomLocationOptions;
-//    private double[] location_coors = new double[2];
-//    private PoseSubscriber poseSubscriber;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Nullable
@@ -90,153 +82,6 @@ public class MapxusFragment extends Fragment implements OnMapReadyCallback, OnMa
         mViewModel.registerOnTemiLocationChangedListener(this);
         mViewModel.registerOnRobotLocationChangedListener(this);
 
-        // ignore this for now
-//        mViewModel.getRosData().observe(getViewLifecycleOwner(), data -> {
-//            if (data.getMessage() instanceof Odometry) {
-//                Odometry pose = (Odometry) data.getMessage();
-//
-//                if (data.getTopic().name.equals("/odom")) {
-//                    double x = pose.getPose().getPose().getPosition().getX();
-//                    double y = pose.getPose().getPose().getPosition().getY();
-//
-//                    Quaternion q = pose.getPose().getPose().getOrientation();
-//
-//////                    ArrayList<Double> originalQ = new ArrayList<>();
-////                    double[] originalQ = {q.getW(), q.getX(), q.getY(), q.getZ()};
-////                    double[] norm = new double[4];
-////
-////                    for (int i = 0; i < 4; i++){
-////                        norm[i] = Math.sqrt(Math.pow(originalQ[i], 2) + 1);
-////                    }
-////
-////                    double[] newQ = new double[4];
-////                    for (int i = 0; i < 4; i++) {
-////                        newQ[i] = originalQ[i] / norm[i];
-////
-////                        if (newQ[i] < 0) newQ[i] = -newQ[i];
-////                    }
-////
-////                    double[] eul = new double[3];
-////                    eul[0] = Math.atan2(2*())
-//
-//                    Log.d(TAG, "odom q (w, x, y, z): " + q.getW() + ", " + q.getX() + ", " + q.getY() + ", "+ q.getZ() + ", ");
-//
-////                    double orientation = Math.atan2(2.0*(q.getY()*q.getZ() + q.getW()*q.getX()),
-////                        q.getW()*q.getW() - q.getX()*q.getX() - q.getY()*q.getY() + q.getZ()*q.getZ());
-//                    double orientation = Math.atan2(2.0*(q.getZ()*q.getW() + q.getX()*q.getY()),
-//                        - 1 + (2.0 * (q.getW()*q.getW() + q.getX()*q.getX())));
-////                    double orientation = (Math.asin(q.getZ()) * 2) * 180 / Math.PI; // 90 degrees shift
-//
-////atan2(2.0 * (q.q3 * q.q0 + q.q1 * q.q2) , - 1.0 + 2.0 * (q.q0 * q.q0 + q.q1 * q.q1));
-//
-//                    // change to radian
-//                    orientation = Math.toDegrees(orientation);
-//
-//                    // reverse the rotation
-//                    orientation += 180;
-//                    if (orientation >= 360)
-//                        orientation = orientation % 360;
-//
-//                    // and 90 degree shift
-//                    orientation = 360 - orientation - 90;
-//
-//
-//
-//
-//
-//                    Log.d(TAG, "odom topic: " + data.getTopic().name + data.getTopic().type);
-//                    Log.d(TAG, "odom data (x, y, q, orientation): " + x + ", " + y + ", " + orientation);
-////                    Log.d(TAG, "odom data q (x, y, q, orientation): " + x + ", " + y + ", " + orientation);
-//
-//                    // display the icon on map if the MAP IS READY
-//                    if (mapboxMap != null && mapxusMap != null) {
-//                        // CYT building corner as origin
-//                        double originLat = 22.334566;
-//                        double originLng = 114.263432;
-//
-//                        // simple way to calculate
-//                        final float latScaleFactor = (float) 0.00001;
-//                        final float lngScaleFactor = (float) 0.00001045;
-//
-//                        // TODO: simplify this by calculating rotatedX & rotatedY once only (per venue)
-////                        int angleDiff = 180;
-////                        float rotatedX = (float) (x * (Math.cos(Math.toRadians(angleDiff)) - Math.sin(Math.toRadians(angleDiff))));
-////                        float rotatedY = (float) (y * (Math.sin(Math.toRadians(angleDiff)) + Math.cos(Math.toRadians(angleDiff))));
-//
-//                        double rotatedX = x;
-//                        double rotatedY = y;
-//
-//                        double latitude = rotatedY * latScaleFactor + originLat;
-//                        double longitude = rotatedX * lngScaleFactor + originLng;
-//
-//                        // set location to update mapxus map and wait for interval update
-//                        queuedLocation = new com.mapxus.map.mapxusmap.positioning.IndoorLocation("TURTLE_BOT",
-//                                latitude, longitude, "3F", "31742af5bc8446acad14e0c053ae468a", System.currentTimeMillis());
-//                        locUpdateInQueue = true;
-//
-//                        // update orientation
-//                        if (mapxusPositioningProvider != null)
-//                            mapxusPositioningProvider.dispatchCompassChange((float) orientation, com.mapxus.map.mapxusmap.positioning.SensorAccuracy.SENSOR_ACCURACY_MEDIUM);
-//
-//                    }
-//                }
-//            }
-//
-//
-//
-//
-//
-////            if (data.getMessage() instanceof PoseWithCovarianceStamped) {
-////                PoseWithCovarianceStamped pose = (PoseWithCovarianceStamped) data.getMessage();
-////
-//////                if (data.getTopic().name.equals(CustomTopicName.SLOVLP_EKF.name)) {
-////                if (data.getTopic().name.equals("/odom")) {
-////                    double x = pose.getPose().getPose().getPosition().getX();
-////                    double y = pose.getPose().getPose().getPosition().getY();
-////
-////                    Log.d(TAG, "vlpekf topic: " + data.getTopic().name + data.getTopic().type);
-////                    Log.d(TAG, "vlpekf data (x,y): " + x + ", " + y);
-////
-////                    // display the icon on map if the MAP IS READY
-////                    if (mapboxMap != null && mapxusMap != null) {
-////                        // CYT building corner as origin
-////                        double originLat = 22.334566;
-////                        double originLng = 114.263432;
-////
-////                        // simple way to calculate
-////                        final float latScaleFactor = (float) 0.00001;
-////                        final float lngScaleFactor = (float) 0.00001045;
-////
-////                        // TODO: simplify this by calculating rotatedX & rotatedY once only (per venue)
-//////                        int angleDiff = 180;
-//////                        float rotatedX = (float) (x * (Math.cos(Math.toRadians(angleDiff)) - Math.sin(Math.toRadians(angleDiff))));
-//////                        float rotatedY = (float) (y * (Math.sin(Math.toRadians(angleDiff)) + Math.cos(Math.toRadians(angleDiff))));
-////
-////                        double rotatedX = -x;
-////                        double rotatedY = -y;
-////
-////                        double latitude = rotatedY * latScaleFactor + originLat;
-////                        double longitude = rotatedX * lngScaleFactor + originLng;
-////
-////                        // set location to update mapxus map and wait for interval update
-////                        queuedLocation = new com.mapxus.map.mapxusmap.positioning.IndoorLocation("TURTLE_BOT",
-////                                latitude, longitude, "3F", "31742af5bc8446acad14e0c053ae468a", System.currentTimeMillis());
-////                        locUpdateInQueue = true;
-////
-////                    }
-////                }
-////            }
-//
-//            Log.d(TAG, "general data topic: " + data.getTopic().name + data.getTopic().type);
-//            Log.d(TAG, "general data message: " + data.getMessage());
-//
-////            if (data.getMessage() instanceof TFMessage) {
-////                Log.d(TAG, "tf data topic: " + data.getTopic().name + data.getTopic().type);
-////                Log.d(TAG, "tf data message: " + data.getMessage().toRawMessage().getName());
-////                Log.d(TAG, "tf data message: " + data.getMessage().toRawMessage().getType());
-////            }
-//        });
-
         return v;
     }
 
@@ -244,24 +89,18 @@ public class MapxusFragment extends Fragment implements OnMapReadyCallback, OnMa
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        mapxusPoseViewGroup = view.findViewById(R.id.mapxusView);
-//        mapxusPoseViewGroup.setDataListener(this);
-//        mapxusPoseViewGroup.setOnWidgetDetailsChanged(this);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-//        startLocationUpdateThread();
         mViewModel.onStart();
-//        mViewModel.getMapxusManager().onStart();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mViewModel.onPause();
-//        mViewModel.getMapxusManager().onPause();
     }
 
     @Override
@@ -281,7 +120,8 @@ public class MapxusFragment extends Fragment implements OnMapReadyCallback, OnMa
         this.mapboxMap = mapboxMap;
 
         // move camera to ICDC
-        mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new com.mapbox.mapboxsdk.geometry.LatLng(22.33446, 114.263551), 18), 500);
+        mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new com.mapbox.mapboxsdk.geometry.LatLng(22.33446, 114.263551),
+            18.5), 500);
 
         mapboxMap.getStyle(style -> {
             // prepareMapboxLocationComponent
@@ -308,6 +148,7 @@ public class MapxusFragment extends Fragment implements OnMapReadyCallback, OnMa
                     LocationComponentActivationOptions.builder(getActivity(), style)
                             .locationComponentOptions(mapBoxCustomLocationOptions)
                             .build();
+
             //mapBoxLocationComponent = mapboxMap.getLocationComponent();
             //mapBoxLocationComponent.activateLocationComponent(customlocationComponentActivationOptions);
             //mapBoxLocationComponent.activateLocationComponent(mapBoxDefaultLocationComponentActivationOptions);
@@ -381,8 +222,13 @@ public class MapxusFragment extends Fragment implements OnMapReadyCallback, OnMa
             String latString = String.format("%.6f", latLng.latitude);
             String lngString = String.format("%.6f", latLng.longitude);
 
-            Timber.tag("map click").d("lat: %s, lng: %s", latString, lngString);
-            Timber.tag("map click").d("floor: %s, buildingId: %s", floor, buildingId);
+            Timber.tag("mapclick").d("lat: %s, lng: %s", latString, lngString);
+            Timber.tag("mapclick").d("floor: %s, buildingId: %s", floor, buildingId);
+
+            // send latlng to view model
+            // handle single floor for now
+            // translate to temi's x'y
+            mViewModel.onMapClicked(latLng);
 
             // logics for showing icon
 //            if (LiphyState.isDeveloperMode()) {
@@ -426,9 +272,6 @@ public class MapxusFragment extends Fragment implements OnMapReadyCallback, OnMa
 
             @Override
             public void onProviderStopped() {
-//                isMapReadyForCompass = true;
-                //mapxusMap.setLocationProvider(mapxusPositioningProvider);
-                //mapxusPositioningProvider.start();
             }
 
             @Override
@@ -446,8 +289,8 @@ public class MapxusFragment extends Fragment implements OnMapReadyCallback, OnMa
 
         // init mapxus manager
         mViewModel.getMapxusManager().init(mapxusPositioningProvider);
-        Timber.tag(TAG).d("init mapxus manager");
 
+        // update mapxus map with positioning provider
         mapxusMap.setLocationProvider(mapxusPositioningProvider);
 
     }
@@ -456,12 +299,6 @@ public class MapxusFragment extends Fragment implements OnMapReadyCallback, OnMa
     public void OnTemiLocationChanged(IndoorLocation location) {
         Timber.tag(TAG).d("temi location update: %f, %f", location.getLatitude(), location.getLongitude());
         updateLocationOnMap(location);
-
-//        // set location to update mapxus map and wait for interval update
-//        queuedLocation = location;
-//        locUpdateInQueue = true;
-//        if (mapxusPositioningProvider != null)
-//            mapxusPositioningProvider.dispatchCompassChange(degree, com.mapxus.map.mapxusmap.positioning.SensorAccuracy.SENSOR_ACCURACY_MEDIUM);
     }
 
     @Override
@@ -482,41 +319,5 @@ public class MapxusFragment extends Fragment implements OnMapReadyCallback, OnMa
         // update orientation
         mViewModel.getMapxusManager().dispatchCompassChange(location.getBearing());
     }
-
-    //    @Override
-//    public void onNewWidgetData(BaseData data) {
-////        mViewModel.publishData(data);
-//    }
-//
-//    @Override
-//    public void onWidgetDetailsChanged(BaseEntity widgetEntity) {
-//        mViewModel.updateWidget(widgetEntity);
-//    }
-
-//    private final Runnable locationUpdateRunnable = new Runnable() {
-//        @Override
-//        public void run() {
-//            try {
-//                if(locUpdateInQueue) {
-//                    mapxusPositioningProvider.dispatchIndoorLocationChange(queuedLocation);
-//                }
-//            } finally {
-//                // 100% guarantee that this always happens, even if
-//                // your update method throws an exception
-//                locationUpdateHandler.postDelayed(locationUpdateRunnable, 200);
-//            }
-//        }
-//    };
-//
-//    private void startLocationUpdateThread() {
-//        locationUpdateHandler = new Handler();
-//        locationUpdateRunnable.run();
-//    }
-//
-//    private void stopLocationUpdateThread() {
-//        locationUpdateHandler.removeCallbacks(locationUpdateRunnable);
-//    }
-
-
 }
 
