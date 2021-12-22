@@ -15,6 +15,7 @@ import com.mapxus.map.mapxusmap.impl.SupportMapxusMapFragment;
 /**
  * Include a map fragment within your app using Android support library.
  */
+@Deprecated
 public class SupportMapFragmentActivity extends AppCompatActivity {
 
     SupportMapxusMapFragment mapFragment;

@@ -10,6 +10,8 @@ import org.ros.node.topic.Publisher;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import timber.log.Timber;
+
 /**
  * ROS Node for publishing Messages on a specific topic.
  *
@@ -33,6 +35,8 @@ public class PubNode extends AbstractNode {
         publisher = parentNode.newPublisher(topic.name, topic.type);
 
         this.createAndStartSchedule();
+        
+        Timber.tag("ros").d("pubnode onStart");
     }
 
     /**

@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Deprecated
 public class MapxusPoseViewGroup extends ViewGroup {
 
     public static final String TAG = MapxusPoseViewGroup.class.getSimpleName();

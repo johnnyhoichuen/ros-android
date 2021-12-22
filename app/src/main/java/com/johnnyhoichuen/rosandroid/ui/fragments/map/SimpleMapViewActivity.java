@@ -9,6 +9,7 @@ import com.mapxus.map.mapxusmap.api.map.MapViewProvider;
 import com.mapxus.map.mapxusmap.impl.MapboxMapViewProvider;
 import com.johnnyhoichuen.rosandroid.R;
 
+@Deprecated
 public class SimpleMapViewActivity extends AppCompatActivity {
 
     private MapView mapView;

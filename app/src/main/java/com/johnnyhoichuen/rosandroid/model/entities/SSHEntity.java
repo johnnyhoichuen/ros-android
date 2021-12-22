@@ -19,7 +19,7 @@ public class SSHEntity {
     public long id;
 
     public long configId;
-    public String ip = "192.168.0.10";
+    public String ip = "192.168.0.104";
     public int port = 22;
     public String username = "ubuntu";
     public String password = "ubuntu";

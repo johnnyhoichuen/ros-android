@@ -75,7 +75,9 @@ public class MainFragment extends Fragment implements OnBackPressedListener {
             toggle.syncState();
         }
 
-        // Select Master tab as home
+        // Select Map tab as home
+//        tabLayout.selectTab(tabLayout.getTabAt(4));
+//        navController.navigate(R.id.action_to_mapxusFragment);
         tabLayout.selectTab(tabLayout.getTabAt(0));
         navController.navigate(R.id.action_to_masterFragment);
 

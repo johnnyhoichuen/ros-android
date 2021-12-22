@@ -25,7 +25,6 @@ public class JoystickData extends BaseData {
     public float x;
     public float y;
 
-
     public JoystickData(float x, float y) {
         this.x = x;
         this.y = y;

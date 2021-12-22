@@ -44,9 +44,9 @@ public class MapxusManager {
 
     public void updateQueuedLocation(IndoorLocation location) {
         getInstance().queuedLocation = location;
-//        queuedLocation = location;
+
+        // check if we're referring to the same queuedLocation
         Timber.tag(TAG).d("queuedLocation updated with id %d",
-//                System.identityHashCode(queuedLocation));
                 System.identityHashCode(getInstance().queuedLocation));
     }
 
@@ -62,10 +62,8 @@ public class MapxusManager {
 //                if (getInstance().queuedLocation != null) {
                 if (queuedLocation != null) {
                     mapxusPositioningProvider.dispatchIndoorLocationChange(getInstance().queuedLocation);
-//                    mapxusPositioningProvider.dispatchIndoorLocationChange(queuedLocation);
                     Timber.tag("locationUpdateRunnable").d("updating map with queuedLocation %d",
                         System.identityHashCode(getInstance().queuedLocation));
-//                        System.identityHashCode(queuedLocation));
                 } else {
                     Timber.tag("locationUpdateRunnable").d("queuedLocation is null");
                 }
@@ -78,16 +76,11 @@ public class MapxusManager {
     };
 
     private void startLocationUpdateThread() {
-        locationUpdateHandler = new Handler();
         locationUpdateRunnable.run();
     }
 
     private void stopLocationUpdateThread() {
         locationUpdateHandler.removeCallbacks(locationUpdateRunnable);
     }
-
-//    private IndoorLocation getQueuedLocation() {
-//        return queuedLocation;
-//    }
 
 }

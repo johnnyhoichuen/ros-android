@@ -20,6 +20,10 @@ public class MasterEntity {
     public long id;
 
     public long configId;
-    public String ip = "192.168.0.200";
+
+    /*
+    lenovo carbon x1: 10
+     */
+    public String ip = "192.168.0.10";
     public int port = 11311;
 }
